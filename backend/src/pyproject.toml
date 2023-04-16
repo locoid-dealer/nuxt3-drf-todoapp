@@ -9,6 +9,9 @@ readme = "README.md"
 python = "^3.11"
 django = "^4.2"
 psycopg2-binary = "^2.9.6"
+djangorestframework = "^3.14.0"
+markdown = "^3.4.3"
+django-filter = "^23.1"
 
 
 [build-system]
