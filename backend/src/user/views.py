@@ -5,6 +5,7 @@ from .models import Account
 from .serializer import AccountSerializer
 from django.db import transaction
 
+
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -18,3 +19,19 @@ class CreateUserView(generics.CreateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReadUserView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+    def get(self, request, format=None):
+        return Response(
+            data={
+                "id": request.user.id,
+                "username": request.user.email,
+                "email": request.user.email,
+            },
+            status=status.HTTP_200_OK,
+        )
