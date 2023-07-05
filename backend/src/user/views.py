@@ -35,3 +35,24 @@ class ReadUserView(generics.RetrieveAPIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class UpdateUserView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+    def get_object(self, pk):
+        try:
+            return Account.objects.get(pk=pk)
+        except Account.DoesNotExist:
+            raise Http404
+
+    @transaction.atomic
+    def patch(self, request, format=None):
+        account = self.get_object(1)
+        serializer = AccountSerializer(account, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
