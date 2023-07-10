@@ -50,7 +50,7 @@ class UpdateUserView(generics.UpdateAPIView):
 
     @transaction.atomic
     def patch(self, request, format=None):
-        account = self.get_object(1)
+        account = self.get_object(request.id)
         serializer = AccountSerializer(account, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
